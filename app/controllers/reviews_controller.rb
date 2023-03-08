@@ -1,29 +1,22 @@
 class ReviewsController < ApplicationController
-  def index
-    # code to display a list of all restaurants
-  end
-
-  def show
-    # code to display a single restaurant
-  end
-
   def new
-    # code to display a form for creating a new restaurant
+    @restaurant = Restaurant.find(params[:restaurant_id])
+    @review = @restaurant.reviews.new
   end
 
   def create
-    # code to create a new restaurant in the database
+    @restaurant = Restaurant.find(params[:restaurant_id])
+    @review = @restaurant.reviews.new(review_params)
+    if @review.save
+      redirect_to @restaurant
+    else
+      render :new
+    end
   end
 
-  def edit
-    # code to display a form for editing a restaurant
-  end
+  private
 
-  def update
-    # code to update an existing restaurant in the database
-  end
-
-  def destroy
-    # code to delete a restaurant from the database
+  def review_params
+    params.require(:review).permit(:content, :rating)
   end
 end
